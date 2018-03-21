@@ -22,6 +22,18 @@
           <button type="button" class="close float-right clearfix" aria-label="Close" @click="removeTodo(todo)">
             <span aria-hidden="true">&times;</span>
           </button>
+          <div v-if="todo.complete">
+            <b-form-input type="text"
+                          placeholder="New Todo"
+                          @keyup.native.enter="updateTodo(todo, todo.title)"
+                          icon="check"
+                          size="is-large"
+                          v-model="todo.title">
+            </b-form-input>
+          </div>
+          <button @click="editTodo(todo)" type="button" class="close float-right clearfix" >
+            edit
+          </button>
         </div>
       </div>
     </div>
@@ -51,7 +63,8 @@ export default {
     return {
       newTodo: '',
       dismissSecs: 3,
-      dismissCountDown: 0
+      dismissCountDown: 0,
+      edit: false
     }
   },
   methods: {
@@ -66,8 +79,12 @@ export default {
     removeTodo (todo) {
       todosRef.child(todo['.key']).remove()
     },
+    editTodo(todo) {
+      todosRef.child(todo['.key'] + '/complete').set(true)
+    },
     updateTodo (todo, text) {
-      todosRef.child(todo['.key'] + '/text').set(text)
+      todosRef.child(todo['.key'] + '/title').set(text)
+      todosRef.child(todo['.key'] + '/complete').set(false)
     },
     countDownChanged (dismissCountDown) {
       this.dismissCountDown = dismissCountDown
