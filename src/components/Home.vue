@@ -79,7 +79,7 @@ export default {
     removeTodo (todo) {
       todosRef.child(todo['.key']).remove()
     },
-    editTodo(todo) {
+    editTodo (todo) {
       todosRef.child(todo['.key'] + '/complete').set(true)
     },
     updateTodo (todo, text) {
